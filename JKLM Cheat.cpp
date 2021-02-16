@@ -20,6 +20,9 @@ using namespace std;
 
 int majuscule;
 
+bool legit = false;
+int min1 = 100, max1 = 420;
+
 void ClearWord() {
     //Initialize keyboard
     INPUT ip;
@@ -106,6 +109,62 @@ void WriteWord() {
     Sleep(500); //0.5 sec pause to avoid double click
 }
 
+void WriteLetter() {
+    //Initialize keyboard
+    INPUT ip;
+    ip.type = INPUT_KEYBOARD;
+    ip.ki.wScan = 0;
+    ip.ki.time = 0;
+    ip.ki.dwExtraInfo = 0;
+
+
+
+
+    //Past the content with ctrl + V
+    ip.ki.wVk = VK_CONTROL;
+    ip.ki.dwFlags = 0;
+    SendInput(1, &ip, sizeof(INPUT));
+    Sleep(10);
+    ip.ki.wVk = 'V';
+    ip.ki.dwFlags = 0;
+    SendInput(1, &ip, sizeof(INPUT));
+
+    Sleep(10);
+
+    ip.ki.wVk = 'V';
+    ip.ki.dwFlags = KEYEVENTF_KEYUP;
+    SendInput(1, &ip, sizeof(INPUT));
+    ip.ki.wVk = VK_CONTROL;
+    ip.ki.dwFlags = KEYEVENTF_KEYUP;
+    SendInput(1, &ip, sizeof(INPUT));
+
+
+    Sleep(10); //Quick sleep
+}
+
+void PressEnter() {
+    //Initialize keyboard
+    INPUT ip;
+    ip.type = INPUT_KEYBOARD;
+    ip.ki.wScan = 0;
+    ip.ki.time = 0;
+    ip.ki.dwExtraInfo = 0;
+
+
+
+    //Press enter to validate
+    ip.ki.wVk = VK_RETURN;
+    ip.ki.dwFlags = 0;
+    SendInput(1, &ip, sizeof(INPUT));
+    Sleep(10);
+    ip.ki.wVk = VK_RETURN;
+    ip.ki.dwFlags = KEYEVENTF_KEYUP;
+    SendInput(1, &ip, sizeof(INPUT));
+
+    Sleep(500); //0.5 sec pause to avoid double click
+
+}
+
 //Source: https://stackoverflow.com/questions/56547966/pasting-after-setclipboarddata-in-c-does-not-include-newlines-for-notepad
 void toClipboard(const std::string& s) {
     OpenClipboard(0);
@@ -180,6 +239,7 @@ char GetLetter(int lettre) {
 
 string getWord() {
     string word = "";
+    srand(time(NULL));
     while (1) {
         int lettre, result, lastresult, lastletter = '1';
         char add_letter;
@@ -231,6 +291,17 @@ int main()
     cout << endl;
     cout << "Just type de letters you have to use and enter after!" << endl;
     cout << "Change dico.txt with your language dictionnary: 1 word per line, no accents!" << endl;
+    cout << endl << "Write all letter instantly or one by one? (y/n) ";
+    char answer;
+    cin >> answer;
+    if (answer == 'y') {
+        legit = true;
+        cout << "Entrez un temps d'ecriture minimum (100ms conseille): ";
+        cin >> min1;
+        cout << "Entrez un temps d'ecriture maximum (400ms conseille): ";
+        cin >> max1;
+
+    }
 
     errno_t erreur;
     FILE* dictionnaire;
@@ -281,7 +352,22 @@ int main()
                 if (!(found_indesirable_space != string::npos || found_indesirable_dash != string::npos)) {
                     cout << "Suggestion: " << dico.at(i) << endl;
                     toClipboard(dico.at(i));
-                    WriteWord();
+                    if (legit) {
+                        ClearWord();
+                        string answer_legit = dico.at(i);
+                        for (unsigned int i = 0; i < answer_legit.size(); i++) {
+                            toClipboard(string(1, answer_legit.at(i)));
+                            WriteLetter();
+                            int range = max1 - min1 + 1;
+                            int num = rand() % range + min1;
+                            Sleep(num);
+                        }
+                        PressEnter();
+                    }
+                    else {
+                        WriteWord();
+                    }
+                    
 
                     answer_found = true;
                 }
