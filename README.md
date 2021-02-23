@@ -12,7 +12,7 @@ You launch the software, you join a JKLM Bomb Party game, you type the letters y
 
 It can find a word and send it in less than a second, which is of course sufficient to win the game.
 
-Some parts of the code where found on other websites, which are credited in the code.
+Some parts of the code were found on other websites which are credited in the code.
 
 Disclaimer:
 This software should not be used in online games against people you don't know, it was developped for a contest and should be used for educational purposes only!
