@@ -294,7 +294,7 @@ int main()
     cout << endl << "Write all letter instantly or one by one? (y/n) ";
     char answer;
     cin >> answer;
-    if (answer == 'y') {
+    if (answer != 'y') {
         legit = true;
         cout << "Entrez un temps d'ecriture minimum (100ms conseille): ";
         cin >> min1;
