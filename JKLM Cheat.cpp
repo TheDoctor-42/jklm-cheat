@@ -240,12 +240,14 @@ char GetLetter(int lettre) {
 string getWord() {
     string word = "";
     srand(time(NULL));
+    cout << "waiting!" << endl;
     while (1) {
         int lettre, result, lastresult, lastletter = '1';
         char add_letter;
         lettre = 13;
         for (lettre == 13; lettre < 256; lettre++) {
             result = GetKeyState(lettre);
+            //cout << "Lettre: " << GetKeyState(lettre) << endl;
             if ((result != 0) && (result != 1) && (lettre != lastletter))
             {
                 add_letter = GetLetter(lettre);
@@ -271,7 +273,8 @@ string getWord() {
                 lastresult = result;
                 lastletter = lettre;
                 lettre = 13;
-                Sleep(60);
+                while (GetKeyState(lastletter) == lastresult);
+                //Sleep(80);
             }
         }
         Sleep(50);
@@ -308,6 +311,7 @@ int main()
     erreur = fopen_s(&dictionnaire, "dico.txt", "r, ccs=UTF-8");
     if (erreur != 0) {
         cout << "Impossible de trouver le fichier dico.txt!" << endl;
+        system("PAUSE");
         return 0;
     }
 
@@ -340,6 +344,7 @@ int main()
     cout << endl << "Ready to answer!" << endl << endl;
     while (1) {
         string searching_for;
+        
         searching_for = getWord();
         bool answer_found = false;
         for (unsigned int i = 0; i < dico.size() && answer_found == false; i++) {
