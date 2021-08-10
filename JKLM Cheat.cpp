@@ -231,6 +231,7 @@ char GetLetter(int lettre) {
     else if (lettre == VK_DELETE) {
         towrite = '2'; // 2 = We erase what entered
         cout << "Efface!" << endl;
+        ClearWord();
        }
 
     //cout << towrite;
@@ -274,7 +275,7 @@ string getWord() {
                 lastletter = lettre;
                 lettre = 13;
                 while (GetKeyState(lastletter) == lastresult);
-                //Sleep(80);
+                cout << "Fin de saisie!" << endl;
             }
         }
         Sleep(50);
